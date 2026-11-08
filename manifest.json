@@ -1,0 +1,22 @@
+{
+  "name": "《小魔女的數學魔導書》v3.1",
+  "short_name": "數學魔導書",
+  "description": "國小一年級至六年級數學卡牌冒險 RPG 教學遊戲（支援四大種族、紙娃娃服裝與橫向觸控操作）",
+  "start_url": "./index.html",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "assets/little_witch.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/little_witch.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

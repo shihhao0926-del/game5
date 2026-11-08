@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0f172a" />
+    <title>《小魔女的數學魔導書》v3.1 創角種族・多存檔紀錄・紙娃娃服裝版</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <!-- 📱 手機／平板直向時自動提示轉為橫向模式遮罩（可一鍵全螢幕鎖定橫向或關閉提示） -->
+    <div id="portrait-rotate-overlay" class="portrait-rotate-overlay">
+        <div class="rotate-card">
+            <div class="rotate-phone-icon">📱🔄</div>
+            <h3>建議轉為【橫向模式】遊玩</h3>
+            <p>《小魔女的數學魔導書》專為手機與平板<strong>橫向全螢幕操作</strong>最佳化！<br>請將您的裝置橫放，或點擊下方按鈕一鍵切換全螢幕橫向模式。</p>
+            <div class="rotate-actions">
+                <button class="btn-gold" id="btn-overlay-fullscreen">⛶ 一鍵全螢幕並鎖定橫向</button>
+                <button class="btn-secondary btn-sm" id="btn-overlay-dismiss">👌 先維持目前畫面繼續玩</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 頂部角色狀態與功能列 -->
+    <header class="top-header">
+        <div class="header-row-main">
+            <div class="brand-title">
+                <img src="assets/little_witch.png" alt="角色頭像" class="brand-witch-avatar" onerror="this.src='assets/little_witch.svg'" />
+                <div>
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                        <h1>《小魔女的數學魔導書》</h1>
+                        <span class="version-pill">v3.1 種族創角＆紙娃娃服裝版</span>
+                    </div>
+                    <div id="hdr-char-identity" style="font-size:0.84rem;color:#fde047;margin-top:2px;"></div>
+                </div>
+            </div>
+            <div class="witch-stats-bar">
+                <div class="stat-chip" title="生命值（含種族、防具與服裝加成）">❤️ 生命 HP: <strong id="hdr-hp">100</strong></div>
+                <div class="stat-chip" title="魔攻力（含種族、法杖與服裝加成）">⚔️ 魔攻 ATK: <strong id="hdr-atk">10</strong></div>
+                <div class="stat-chip" title="起始 1 點，每回合補充並可將沒用完的魔力累積到下一回合！">💧 每回合 MP: <strong id="hdr-mp">+1 (可累積)</strong></div>
+                <div class="stat-chip" title="可用於魔導商店與紙娃娃服裝店購買造型、裝備與卡牌">💰 金幣: <strong id="hdr-gold">90</strong></div>
+                <div class="stat-chip">法杖: <strong id="hdr-weapon">🪄 學徒木杖</strong></div>
+                <div class="stat-chip">防具: <strong id="hdr-armor">👚 見習布袍</strong></div>
+                <button class="btn-secondary btn-xs" id="btn-expand-header-mini" title="展開或收合下方年級與功能工具列">⚙️ 工具列 ▴</button>
+            </div>
+        </div>
+        <div class="header-row-sub">
+            <div class="grade-selector-bar">
+                <span>🎒 數學年級：</span>
+                <div class="grade-btn-group" id="hdr-grade-btns">
+                    <button class="grade-btn" data-grade="1">小一 (注音)</button>
+                    <button class="grade-btn" data-grade="2">小二</button>
+                    <button class="grade-btn" data-grade="3">小三</button>
+                    <button class="grade-btn active" data-grade="4">小四</button>
+                    <button class="grade-btn" data-grade="5">小五</button>
+                    <button class="grade-btn" data-grade="6">小六</button>
+                </div>
+            </div>
+            <div class="relics-bar">
+                <span>🏆 遺物：</span>
+                <div id="hdr-relics"></div>
+            </div>
+            <div class="top-tools">
+                <button class="btn-gold btn-xs" id="btn-fullscreen" title="在手機、平板或電腦切換全螢幕橫向遊玩模式">⛶ 全螢幕橫向</button>
+                <button class="btn-primary btn-xs" id="btn-save-manager" title="創立新人物、切換不同人物紀錄檔、匯出本機紀錄或重新開始">💾 人物紀錄檔／創角</button>
+                <button class="btn-secondary btn-xs" id="btn-quick-restart" title="將目前人物或所有紀錄清空，重新開始遊玩">🔄 重新開始</button>
+                <button class="btn-gold btn-xs" id="btn-vfx-gallery" title="一鍵預覽全部 14 張卡牌 + 完美格擋的 Google Imagen 3.0 華麗魔法動畫！">🎬 魔法動畫展示廳</button>
+                <button class="btn-secondary btn-xs" id="btn-time-limit" title="點擊切換選擇卡牌後的答題時間限制（10秒 / 20秒 / 30秒 / ∞不限時間）">⏱️ 答題限時：20秒</button>
+                <button class="btn-secondary btn-xs" id="btn-input-mode">🔢 作答：數字填空 + 選擇</button>
+                <button class="btn-secondary btn-xs" id="btn-mute">🔊 音效：開</button>
+                <button class="btn-secondary btn-xs" id="btn-teacher-mode">🎓 教師／測試工具</button>
+                <button class="btn-secondary btn-xs" id="btn-toggle-header" title="收合或展開上方年級與工具列，讓手機橫向視野更大">🔼 精簡頂欄</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- 🏰 魔法學院主視圖 -->
+        <section id="academy-view">
+            <nav class="academy-nav academy-nav-5">
+                <button class="nav-tab-btn active" data-tab="portal">🚪 傳送門（出發冒險）</button>
+                <button class="nav-tab-btn" data-tab="wardrobe">👗 紙娃娃服裝店（造型衣櫥）</button>
+                <button class="nav-tab-btn" data-tab="meditation">🧘‍♀️ 冥想修煉室（練功加屬性）</button>
+                <button class="nav-tab-btn" data-tab="shop">🛒 魔導商店（裝備與卡牌）</button>
+                <button class="nav-tab-btn" data-tab="grimoire">📖 數學魔導圖鑑（筆記與牌組）</button>
+            </nav>
+
+            <!-- 1. 傳送門面板 -->
+            <div id="panel-portal" class="academy-panel active">
+                <div id="stages-container"></div>
+            </div>
+
+            <!-- 2. 紙娃娃服裝店（頭部、衣服、背部、鞋子、手部） -->
+            <div id="panel-wardrobe" class="academy-panel">
+                <div id="wardrobe-content"></div>
+            </div>
+
+            <!-- 3. 冥想修煉室面板 -->
+            <div id="panel-meditation" class="academy-panel">
+                <div id="meditation-content"></div>
+            </div>
+
+            <!-- 4. 魔導商店面板 -->
+            <div id="panel-shop" class="academy-panel">
+                <div id="shop-content"></div>
+            </div>
+
+            <!-- 5. 數學魔導圖鑑面板 -->
+            <div id="panel-grimoire" class="academy-panel">
+                <div id="grimoire-content"></div>
+            </div>
+        </section>
+
+        <!-- ⚔️ 回合制戰鬥主視圖 -->
+        <section id="battle-view" class="hidden">
+            <div class="battle-topbar">
+                <div>
+                    <h2 id="battle-stage-title">第 1 關</h2>
+                    <p id="battle-math-focus" style="color:#bae6fd;font-size:0.9rem;"></p>
+                </div>
+                <button class="btn-secondary btn-sm" id="btn-retreat">🏳️ 撤回魔法學院</button>
+            </div>
+
+            <!-- 左右對決角色區 -->
+            <div class="battle-arena">
+                <!-- 左側：玩家角色（即時同步種族、性別與 5 部位紙娃娃服裝造型！） -->
+                <div class="combatant-card witch-combatant">
+                    <div class="avatar-frame" id="witch-avatar-box"></div>
+                    <div class="combatant-info">
+                        <h3 id="player-name-label">🧙‍♀️ 星辰小魔女</h3>
+                        <div id="player-race-skill-line" style="font-size:0.8rem;color:#fde047;margin-bottom:4px;"></div>
+                        <div class="hp-bar-outer">
+                            <div class="hp-bar-inner" id="player-hp-bar" style="width:100%"></div>
+                            <div class="hp-bar-label">❤️ HP: <span id="player-hp-text">100 / 100</span></div>
+                        </div>
+                        <div class="combat-badges-row">
+                            <span class="c-badge" id="player-shield-badge">🛡️ 護盾: 0</span>
+                            <span class="c-badge" id="player-atk-badge">⚔️ 魔攻: 10</span>
+                            <span class="c-badge" id="player-reflect-badge">🔄 反彈: 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右側：精靈怪物／Boss -->
+                <div class="combatant-card enemy-combatant">
+                    <div class="avatar-frame" id="enemy-avatar-box"></div>
+                    <div class="combatant-info">
+                        <h3 id="enemy-name-label">精靈</h3>
+                        <div class="hp-bar-outer">
+                            <div class="hp-bar-inner" id="enemy-hp-bar" style="width:100%"></div>
+                            <div class="hp-bar-label">❤️ HP: <span id="enemy-hp-text">50 / 50</span></div>
+                        </div>
+                        <div class="combat-badges-row">
+                            <span class="c-badge" id="enemy-shield-badge">🛡️ 數字護盾: 0</span>
+                        </div>
+                        <div id="enemy-status-row"></div>
+                        <p id="enemy-desc-text" style="font-size:0.84rem;color:#cbd5e1;margin-top:6px;"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 魔力與回合控制列 -->
+            <div class="battle-control-bar">
+                <div id="player-mp-display" style="font-size:1.1rem;font-weight:bold;"></div>
+                <div style="color:#cbd5e1;font-size:0.9rem;">💡 本回合沒用完的 MP 可累積至下回合！點擊結束回合可獲得新 MP 並重抽 4 張牌</div>
+                <button class="btn-gold" id="btn-end-turn">🌙 結束回合（累積 MP + 抽牌）</button>
+            </div>
+
+            <!-- 手牌區（每回合抽 4 張） -->
+            <div id="hand-cards-container" class="hand-cards-grid"></div>
+
+            <!-- 戰鬥紀錄區 -->
+            <div class="battle-log-box">
+                <strong style="color:#fde047;">📜 戰鬥紀錄：</strong>
+                <ul id="battle-log-list"></ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- 彈跳題目／創角／存檔管理／結算視窗 -->
+    <div id="question-modal" class="modal-overlay hidden"></div>
+
+    <script src="js/audio.js"></script>
+    <script src="js/imagen-vfx-assets.js"></script>
+    <script src="js/vfx-sprites.js"></script>
+    <script src="js/math-engine.js"></script>
+    <script src="js/game-data.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
